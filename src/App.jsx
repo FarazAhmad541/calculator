@@ -17,6 +17,71 @@ function reducer(state, action) {
         current_value: state.current_value + action.payload,
       }
     }
+    case 'CLEAR': {
+      return {
+        ...initial_state,
+      }
+    }
+    case 'TOGGLE SIGN': {
+      return {
+        ...state,
+        current_value: state.current_value * -1,
+      }
+    }
+    case 'INSERT DECIMAL': {
+      return {
+        ...state,
+        current_value: !state.current_value.includes('.')
+          ? state.current_value + '.'
+          : state.current_value,
+      }
+    }
+    case 'OPERATION': {
+      return {
+        current_value: '',
+        prev_value: state.current_value,
+        operation: action.payload,
+      }
+    }
+    case 'EVALUATE': {
+      switch (state.operation) {
+        case '+': {
+          return {
+            ...state,
+            current_value:
+              Number(state.current_value) + Number(state.prev_value),
+          }
+        }
+        case '-': {
+          return {
+            ...state,
+            current_value:
+              Number(state.prev_value) - Number(state.current_value),
+          }
+        }
+        case '×': {
+          return {
+            ...state,
+            current_value:
+              Number(state.current_value) * Number(state.prev_value),
+          }
+        }
+        case '÷': {
+          return {
+            ...state,
+            current_value:
+              Number(state.prev_value) / Number(state.current_value),
+          }
+        }
+        case '%': {
+          return {
+            ...state,
+            current_value:
+              (Number(state.prev_value) * Number(state.current_value)) / 100,
+          }
+        }
+      }
+    }
   }
 }
 
